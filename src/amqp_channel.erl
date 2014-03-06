@@ -715,7 +715,7 @@ handle_method_from_server1(#'basic.ack'{} = BasicAck, none,
 handle_method_from_server1(
         #'basic.ack'{} = BasicAck, none,
         #state{confirm_handler = {ConfirmHandler, _Ref}} = State) ->
-    ConfirmHandler ! BasicAck,
+    ConfirmHandler ! {self(), BasicAck},
     {noreply, update_confirm_set(BasicAck, State)};
 handle_method_from_server1(#'basic.nack'{} = BasicNack, none,
                            #state{confirm_handler = none} = State) ->
@@ -725,7 +725,7 @@ handle_method_from_server1(#'basic.nack'{} = BasicNack, none,
 handle_method_from_server1(
         #'basic.nack'{} = BasicNack, none,
         #state{confirm_handler = {ConfirmHandler, _Ref}} = State) ->
-    ConfirmHandler ! BasicNack,
+    ConfirmHandler ! {self(), BasicNack},
     {noreply, update_confirm_set(BasicNack, State)};
 
 handle_method_from_server1(Method, none, State) ->
